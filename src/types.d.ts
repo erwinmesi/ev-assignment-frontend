@@ -21,3 +21,10 @@ export type User = {
   email: string;
   roles: Role[];
 };
+
+type UserPayload = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  role_ids: number[];
+};

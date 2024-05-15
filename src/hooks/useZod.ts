@@ -2,14 +2,19 @@ import { z, ZodIssue, type ZodError } from 'zod'
 
 export default () => {
   /**
-   * Translated error message for when a required value is null.
+   * Error message for when a required value is null.
    */
   const requiredError = 'Required'
 
   /**
-   * Translated error message for when an email is invalid.
+   * Error message for when an email is invalid.
    */
   const invalidEmailError = 'Invalid email'
+
+  /**
+   * Error message for when at least one item is required in a list.
+   */
+  const nonEmptyListError = 'Select at least one item.'
 
   /**
    * Formats the errors from a Zod validation error object.
@@ -48,6 +53,7 @@ export default () => {
     formatErrors,
     requiredError,
     invalidEmailError,
+    nonEmptyListError,
     validateSchema,
   }
 }
