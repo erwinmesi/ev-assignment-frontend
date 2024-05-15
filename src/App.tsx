@@ -1,5 +1,5 @@
 function App() {
-  return <div>App</div>;
+  return <div className="h-screen grid place-content-center">App</div>;
 }
 
 export default App;
