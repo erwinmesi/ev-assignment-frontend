@@ -1,5 +1,5 @@
 html {
-  @apply h-full bg-white;
+  @apply h-full bg-slate-50;
 }
 
 body {
@@ -25,6 +25,58 @@ body {
   }
 }
 
+// Reusable class for form labels
 .app-label {
   @apply block text-sm font-medium leading-6 text-gray-900;
+}
+
+// Reusable class for page titles
+.page-title {
+  @apply text-3xl font-bold leading-tight tracking-tight text-gray-900;
+}
+
+// Reusable class for section descriptions
+.section-description {
+  @apply mt-2 text-sm text-gray-700;
+}
+
+// Reusable table class
+.app-table {
+  @apply -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8;
+
+  .table-wrapper {
+    @apply inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8;
+
+    table {
+      @apply min-w-full divide-y divide-gray-300;
+
+      thead {
+        th {
+          @apply px-3 py-3.5 text-left text-sm font-semibold text-gray-900;
+
+          &.main {
+            @apply pl-4 pr-3 sm:pl-3;
+          }
+        }
+      }
+
+      tbody {
+        td {
+          @apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
+
+          &.main {
+            @apply pl-4 pr-3 font-medium text-gray-900 sm:pl-3;
+          }
+
+          .action-primary {
+            @apply cursor-pointer text-indigo-500 hover:text-indigo-600 font-medium;
+          }
+
+          .action-danger {
+            @apply cursor-pointer text-red-500 hover:text-red-600 font-medium;
+          }
+        }
+      }
+    }
+  }
 }
