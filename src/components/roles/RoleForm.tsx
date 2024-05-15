@@ -94,6 +94,7 @@ function RoleForm({ open, onClose, onSuccess, instance }: RoleFormProps) {
               id="name"
               type="text"
               className="app-input"
+              placeholder="Name"
               value={name}
               onInput={(e) => setName(e.currentTarget.value)}
             />
@@ -108,6 +109,7 @@ function RoleForm({ open, onClose, onSuccess, instance }: RoleFormProps) {
           <div className="mt-2">
             <input
               className="app-input"
+              placeholder="Description"
               id="description"
               type="text"
               value={description}

@@ -80,7 +80,7 @@ export default function RolesPage() {
       <main className="px-4 sm:px-6 lg:px-8 py-10 max-w-7xl mx-auto">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="page-title">Roles {isLoading}</h1>
+            <h1 className="page-title">Roles</h1>
             <p className="section-description">
               List of roles available in the system.
             </p>
@@ -116,26 +116,34 @@ export default function RolesPage() {
                       </td>
                     </tr>
                   )}
-                  {roles?.map((role: Role) => (
-                    <tr key={role.id} className="even:bg-gray-50">
-                      <td className="main">{role.name}</td>
-                      <td>{role.description}</td>
-                      <td className="flex justify-end gap-5">
-                        <span
-                          className="action-primary"
-                          onClick={() => handleEditClick(role)}
-                        >
-                          Edit
-                        </span>
-                        <span
-                          className="action-danger"
-                          onClick={() => handleDeleteClick(role)}
-                        >
-                          Delete
-                        </span>
+                  {!isLoading && !roles?.length ? (
+                    <tr>
+                      <td colSpan={4} className="text-center">
+                        No roles found.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    roles?.map((role: Role) => (
+                      <tr key={role.id} className="even:bg-gray-50">
+                        <td className="main">{role.name}</td>
+                        <td>{role.description}</td>
+                        <td className="flex justify-end gap-5">
+                          <span
+                            className="action-primary"
+                            onClick={() => handleEditClick(role)}
+                          >
+                            Edit
+                          </span>
+                          <span
+                            className="action-danger"
+                            onClick={() => handleDeleteClick(role)}
+                          >
+                            Delete
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
