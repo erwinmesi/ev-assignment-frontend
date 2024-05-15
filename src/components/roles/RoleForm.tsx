@@ -1,5 +1,5 @@
-import { FormError } from '@/types'
-import { useState } from 'react'
+import { FormError, Role } from '@/types'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import SlideOver from '@/components/forms/SlideOver'
@@ -12,11 +12,12 @@ import useZod from '@/hooks/useZod'
 
 interface RoleFormProps {
   open: boolean;
+  instance: Role | null;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-function RoleForm({ open, onClose, onSuccess }: RoleFormProps) {
+function RoleForm({ open, onClose, onSuccess, instance }: RoleFormProps) {
   const { roleSchema } = useRoleSchema()
   const { validateSchema } = useZod()
   const { asyncResolve } = useAsync()
@@ -26,6 +27,12 @@ function RoleForm({ open, onClose, onSuccess }: RoleFormProps) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [errors, setErrors] = useState<FormError | null>(null)
+
+  // Set the form values when visibility changes
+  useEffect(() => {
+    setName(instance?.name || '')
+    setDescription(instance?.description || '')
+  }, [open])
 
   /**
    * Handle the form submission.
@@ -46,14 +53,18 @@ function RoleForm({ open, onClose, onSuccess }: RoleFormProps) {
     }
 
     // Trigger the API request
-    const { error }: any = await asyncResolve(rolesApi.create(form))
+    const request = instance?.id
+      ? rolesApi.update(instance.id, form)
+      : rolesApi.create(form)
+
+    const { error }: any = await asyncResolve(request)
     setLoading(false)
 
     if (error) {
       return setErrors(error?.errors)
     }
 
-    toast('Role created successfully!')
+    toast(`Role ${instance?.id ? 'updated' : 'created'} successfully!`)
 
     handleSuccess()
   }
@@ -68,7 +79,11 @@ function RoleForm({ open, onClose, onSuccess }: RoleFormProps) {
   }
 
   return (
-    <SlideOver title="Role" open={open} onClose={onClose}>
+    <SlideOver
+      title={instance ? 'Update Role' : 'Create New Role'}
+      open={open}
+      onClose={onClose}
+    >
       <form className="space-y-6" noValidate onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name" className="app-label">
@@ -104,7 +119,7 @@ function RoleForm({ open, onClose, onSuccess }: RoleFormProps) {
 
         <div>
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Submit' : 'Submitting...'}
+            {loading ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </form>

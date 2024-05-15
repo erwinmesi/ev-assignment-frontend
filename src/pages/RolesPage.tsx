@@ -5,6 +5,7 @@ import RoleForm from '@/components/roles/RoleForm'
 
 export default function RolesPage() {
   const [openSlideOver, toggleSlideOver] = useState(false)
+  const [current, setCurrent] = useState<Role | null>(null)
 
   const {
     data: roles,
@@ -16,7 +17,24 @@ export default function RolesPage() {
    * Refetch the roles and close the slide over.
    */
   const handleFormSuccess = () => {
+    setCurrent(null)
     refetch()
+    toggleSlideOver(false)
+  }
+
+  /**
+   * Opens the slide over with the role data.
+   */
+  const handleEditClick = (role: Role) => {
+    setCurrent(role)
+    toggleSlideOver(true)
+  }
+
+  /**
+   * Clear the current role and close the slide over.
+   */
+  const handleClose = () => {
+    setCurrent(null)
     toggleSlideOver(false)
   }
 
@@ -56,7 +74,7 @@ export default function RolesPage() {
                 <tbody className="bg-white">
                   {isLoading && (
                     <tr>
-                      <td colSpan={3} className="text-center">
+                      <td colSpan={4} className="text-center">
                         Fetching roles...
                       </td>
                     </tr>
@@ -66,7 +84,12 @@ export default function RolesPage() {
                       <td className="main">{role.name}</td>
                       <td>{role.description}</td>
                       <td className="flex justify-end gap-5">
-                        <span className="action-primary">Edit</span>
+                        <span
+                          className="action-primary"
+                          onClick={() => handleEditClick(role)}
+                        >
+                          Edit
+                        </span>
                         <span className="action-danger">Delete</span>
                       </td>
                     </tr>
@@ -79,8 +102,9 @@ export default function RolesPage() {
       </main>
       <RoleForm
         open={openSlideOver}
-        onClose={() => toggleSlideOver(false)}
+        onClose={handleClose}
         onSuccess={handleFormSuccess}
+        instance={current}
       />
     </>
   )

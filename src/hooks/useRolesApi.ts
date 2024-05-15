@@ -4,7 +4,7 @@ import useAxios from '@/hooks/useAxios'
 
 const ENDPOINT = '/api/roles'
 
-type CreateRolePayload = {
+type RolePayload = {
   name: string;
   description: string;
 };
@@ -20,11 +20,17 @@ export default function useRolesApi() {
   /**
    * Create a new role.
    */
-  const create = async (role: CreateRolePayload) =>
-    api.post(`${ENDPOINT}`, role)
+  const create = async (role: RolePayload) => api.post(`${ENDPOINT}`, role)
+
+  /**
+   * Update an existing role.
+   */
+  const update = async (id: number, role: RolePayload) =>
+    api.put(`${ENDPOINT}/${id}`, role)
 
   return {
     create,
+    update,
     findAll,
   }
 }
