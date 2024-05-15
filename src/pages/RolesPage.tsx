@@ -1,11 +1,19 @@
 import { Role } from '@/types'
+import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { useFindAllRolesQuery } from '@/hooks/useRolesApi'
+
 import RoleForm from '@/components/roles/RoleForm'
+import ConfirmDialog from '@/components/forms/ConfirmDialog'
+
+import useRolesApi, { useFindAllRolesQuery } from '@/hooks/useRolesApi'
 
 export default function RolesPage() {
+  const rolesApi = useRolesApi()
+
   const [openSlideOver, toggleSlideOver] = useState(false)
   const [current, setCurrent] = useState<Role | null>(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [confirming, setConfirming] = useState(false)
 
   const {
     data: roles,
@@ -36,6 +44,35 @@ export default function RolesPage() {
   const handleClose = () => {
     setCurrent(null)
     toggleSlideOver(false)
+  }
+
+  /**
+   * Opens the slide over with the role data.
+   */
+  const handleDeleteClick = (role: Role) => {
+    setCurrent(role)
+    setShowConfirm(true)
+  }
+
+  /**
+   * Delete the selected role.
+   */
+  const confirmDelete = async () => {
+    // Set the confirming state to true
+    setConfirming(true)
+
+    // Trigger the delete request
+    await rolesApi.remove((current as Role).id)
+
+    toast(`Role deleted successfully!`)
+
+    // Hide the confirm dialog
+    setConfirming(false)
+    setShowConfirm(false)
+
+    // Reset the current role and refetch the data
+    setCurrent(null)
+    refetch()
   }
 
   return (
@@ -90,7 +127,12 @@ export default function RolesPage() {
                         >
                           Edit
                         </span>
-                        <span className="action-danger">Delete</span>
+                        <span
+                          className="action-danger"
+                          onClick={() => handleDeleteClick(role)}
+                        >
+                          Delete
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -105,6 +147,12 @@ export default function RolesPage() {
         onClose={handleClose}
         onSuccess={handleFormSuccess}
         instance={current}
+      />
+      <ConfirmDialog
+        loading={confirming}
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={confirmDelete}
       />
     </>
   )

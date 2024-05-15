@@ -11,7 +11,7 @@ body {
 }
 
 @mixin btn {
-  @apply flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  @apply flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed;
 }
 
 @layer components {
@@ -21,7 +21,20 @@ body {
 
   // For primary buttons
   .btn-primary {
-    @apply bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline-indigo-600;
+    @apply bg-indigo-600 text-white;
+
+    &:not(:disabled) {
+      @apply hover:bg-indigo-500 focus-visible:outline-indigo-600;
+    }
+  }
+
+  // For secondary buttons
+  .btn-secondary {
+    @apply bg-white text-gray-900 ring-1 ring-inset ring-gray-300;
+
+    &:not(:disabled) {
+      @apply hover:bg-gray-50 focus-visible:outline-gray-400;
+    }
   }
 }
 

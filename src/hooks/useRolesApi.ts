@@ -28,10 +28,16 @@ export default function useRolesApi() {
   const update = async (id: number, role: RolePayload) =>
     api.put(`${ENDPOINT}/${id}`, role)
 
+  /**
+   * Delete an existing role.
+   */
+  const remove = async (id: number) => api.delete(`${ENDPOINT}/${id}`)
+
   return {
     create,
     update,
     findAll,
+    remove,
   }
 }
 
