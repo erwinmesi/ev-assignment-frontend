@@ -12,7 +12,9 @@ export interface Route {
   icon?: HeroIcon;
 }
 
-const routes: { [key: string]: Route } = {
+type RouteKeys = 'login' | 'users' | 'roles';
+
+const routes: Record<RouteKeys, Route> = {
   login: {
     name: 'auth.login',
     label: 'Login',

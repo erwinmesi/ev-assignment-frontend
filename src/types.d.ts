@@ -17,6 +17,7 @@ export type User = {
   id: number;
   firstname: string;
   lastname: string;
+  fullname: string;
   email: string;
   roles: Role[];
 };
