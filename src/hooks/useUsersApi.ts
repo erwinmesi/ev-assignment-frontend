@@ -52,7 +52,7 @@ export const useFindAllUsersQuery = (
   return useQuery<User[]>({
     queryKey: role_id ? ['users', role_id] : ['users'],
     queryFn: () =>
-      findAll(role_id ? { role_id } : null).then(({ data }) => data.data),
+      findAll(role_id ? { role_id } : null).then(({ data }) => data),
     ...options,
   })
 }

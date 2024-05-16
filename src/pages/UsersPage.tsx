@@ -1,9 +1,10 @@
-import { User } from '@/types'
+import { SelectMenuOption, User } from '@/types'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import UserForm from '@/components/users/UserForm'
 import ConfirmDialog from '@/components/forms/ConfirmDialog'
+import SelectMenu from '@/components/forms/SelectMenu'
 
 import useUsersApi, { useFindAllUsersQuery } from '@/hooks/useUsersApi'
 import { useFindAllRolesQuery } from '@/hooks/useRolesApi'
@@ -16,7 +17,7 @@ export default function UsersPage() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [confirming, setConfirming] = useState(false)
 
-  const [roleId] = useState<number | null>(null)
+  const [roleId, setRoleId] = useState<number | null>(null)
 
   const {
     data: users,
@@ -25,6 +26,17 @@ export default function UsersPage() {
   } = useFindAllUsersQuery(roleId, { enabled: true })
 
   const { data: roles } = useFindAllRolesQuery({ enabled: true })
+
+  // Map the roles as SelectMenu options
+  const roleOptions: SelectMenuOption[] = useMemo(
+    () =>
+      roles?.map((role) => ({
+        key: role.id.toString(),
+        label: role.name,
+        description: role.description,
+      })) || [],
+    [roles]
+  )
 
   /**
    * Refetch the users and close the slide over.
@@ -80,6 +92,13 @@ export default function UsersPage() {
     refetch()
   }
 
+  /**
+   * Handle the role selection. Update the roleId state.
+   */
+  const handeRoleSelect = (option: SelectMenuOption | null) => {
+    option?.key ? setRoleId(+option?.key) : setRoleId(null)
+  }
+
   return (
     <>
       <main className="px-4 sm:px-6 lg:px-8 py-10 max-w-7xl mx-auto">
@@ -90,14 +109,23 @@ export default function UsersPage() {
               Manage the users in your application.
             </p>
           </div>
-          <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => toggleSlideOver(true)}
-            >
-              Add user
-            </button>
+          <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex gap-3">
+            <div>
+              <SelectMenu
+                title="Filter by role"
+                onSelect={handeRoleSelect}
+                options={roleOptions}
+              />
+            </div>
+            <div>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => toggleSlideOver(true)}
+              >
+                Add user
+              </button>
+            </div>
           </div>
         </div>
         <div className="mt-8 flow-root p-4 bg-white border rounded">

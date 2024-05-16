@@ -28,3 +28,9 @@ type UserPayload = {
   email: string;
   role_ids: number[];
 };
+
+type SelectMenuOption = {
+  key: string | null;
+  label: string;
+  description?: string;
+};
