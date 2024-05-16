@@ -10,6 +10,11 @@ npm i
 
 ## Run the application
 
+### Copy .env.example into .env
+```
+cp .env.example .env
+```
+
 Start the local development environment
 ```
 npm run dev
